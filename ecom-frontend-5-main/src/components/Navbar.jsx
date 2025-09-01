@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Home from "./Home";
-import { FaCartShopping } from "react-icons/fa6";
+import Home from "./Home"
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
-import { FcBiohazard } from "react-icons/fc";
 // import { json } from "react-router-dom";
 // import { BiSunFill, BiMoon } from "react-icons/bi";
 
@@ -18,7 +15,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [noResults, setNoResults] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
-  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [showSearchResults,setShowSearchResults] = useState(false)
   useEffect(() => {
     fetchData();
   }, []);
@@ -27,7 +24,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
     try {
       const response = await axios.get("http://localhost:8080/api/products");
       setSearchResults(response.data);
-      // console.log(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -36,23 +33,52 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
   const handleChange = async (value) => {
     setInput(value);
     if (value.length >= 1) {
-      setShowSearchResults(true);
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/products/search?keyword=${value}`
-        );
-        setSearchResults(response.data);
-        setNoResults(response.data.length === 0);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error searching:", error);
-      }
+      setShowSearchResults(true)
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/products/search?keyword=${value}`
+      );
+      setSearchResults(response.data);
+      setNoResults(response.data.length === 0);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error searching:", error);
+    }
     } else {
       setShowSearchResults(false);
       setSearchResults([]);
       setNoResults(false);
     }
   };
+
+  
+  // const handleChange = async (value) => {
+  //   setInput(value);
+  //   if (value.length >= 1) {
+  //     setShowSearchResults(true);
+  //     try {
+  //       let response;
+  //       if (!isNaN(value)) {
+  //         // Input is a number, search by ID
+  //         response = await axios.get(`http://localhost:8080/api/products/search?id=${value}`);
+  //       } else {
+  //         // Input is not a number, search by keyword
+  //         response = await axios.get(`http://localhost:8080/api/products/search?keyword=${value}`);
+  //       }
+
+  //       const results = response.data;
+  //       setSearchResults(results);
+  //       setNoResults(results.length === 0);
+  //       console.log(results);
+  //     } catch (error) {
+  //       console.error("Error searching:", error.response ? error.response.data : error.message);
+  //     }
+  //   } else {
+  //     setShowSearchResults(false);
+  //     setSearchResults([]);
+  //     setNoResults(false);
+  //   }
+  // };
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -62,20 +88,6 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
     const newTheme = theme === "dark-theme" ? "light-theme" : "dark-theme";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-  };
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    navigate("/login");
   };
 
   useEffect(() => {
@@ -90,54 +102,13 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
     "Toys",
     "Fashion",
   ];
-  const [cartCount, setCartCount] = useState(0);
-
-  useEffect(() => {
-    const fetchCartCount = async () => {
-      try {
-        // Get user details from localStorage
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (!user) return;
-
-        const userId = user.user_id; // assuming user object has `id`
-
-        // Basic Auth header
-        const auth = localStorage.getItem("auth");
-
-        // Step 1: Get Cart by User ID
-        const cartResponse = await axios.get(
-          `http://localhost:8080/api/cart/${userId}`,
-          {
-            headers: { Authorization: `Basic ${auth}` },
-          }
-        );
-
-        const cartId = cartResponse.data.cartId; // cart object has id
-
-        // Step 2: Get Cart Items by Cart ID
-        const itemsResponse = await axios.get(
-          `http://localhost:8080/api/cart/${cartId}/items`,
-          {
-            headers: { Authorization: `Basic ${auth}` },
-          }
-        );
-
-        // Step 3: Set cart count
-        setCartCount(itemsResponse.data.length);
-      } catch (error) {
-        console.error("Error fetching cart count:", error);
-      }
-    };
-
-    fetchCartCount();
-  }, []);
   return (
     <>
       <header>
         <nav className="navbar navbar-expand-lg fixed-top">
           <div className="container-fluid">
             <a className="navbar-brand" href="https://telusko.com/">
-              E-Kart <FcBiohazard className="main-logo"/>
+              Telusko
             </a>
             <button
               className="navbar-toggler"
@@ -160,13 +131,11 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                     Home
                   </a>
                 </li>
-                {user?.role === "admin" && (
-                  <li className="nav-item">
-                    <Link to={"/add_product"}>
-                      <a className="nav-link">Add Product</a>
-                    </Link>
-                  </li>
-                )}
+                <li className="nav-item">
+                  <a className="nav-link" href="/add_product">
+                    Add Product
+                  </a>
+                </li>
 
                 <li className="nav-item dropdown">
                   <a
@@ -195,20 +164,6 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
 
                 <li className="nav-item"></li>
               </ul>
-
-              <div className="profile-dropdown">
-                <div className="profile-header">
-                  <span className="profile-icon">👤</span>
-                  <span className="profile-name">{user ? user.firstName : "User"}</span>
-                  <span className="arrow">▼</span>
-                </div>
-                <div className="dropdown-menu">
-                  <Link to={"/my-profile"}>My Profile</Link>
-                  <Link>Orders</Link>
-                  <Link to={"/login"}>Logout</Link>
-                </div>
-              </div>
-
               <button className="theme-btn" onClick={() => toggleTheme()}>
                 {theme === "dark-theme" ? (
                   <i className="bi bi-moon-fill"></i>
@@ -216,12 +171,14 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                   <i className="bi bi-sun-fill"></i>
                 )}
               </button>
-              <div className="d-flex align-items-center ">
-                <a href="/cart" className="nav-link text-dark cart-logo">
-                  <div className="logo-container">
-                    <FaCartShopping className="logo" />
-                    <span className="badge">{cartCount}</span>
-                  </div>
+              <div className="d-flex align-items-center cart">
+                <a href="/cart" className="nav-link text-dark">
+                  <i
+                    className="bi bi-cart me-2"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    Cart
+                  </i>
                 </a>
                 {/* <form className="d-flex" role="search" onSubmit={handleSearch} id="searchForm"> */}
                 <input
@@ -236,22 +193,21 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                 />
                 {showSearchResults && (
                   <ul className="list-group">
-                    {searchResults.length > 0
-                      ? searchResults.map((result) => (
+                    {searchResults.length > 0 ? (  
+                        searchResults.map((result) => (
                           <li key={result.id} className="list-group-item">
-                            <a
-                              href={`/product/${result.id}`}
-                              className="search-result-link"
-                            >
-                              <span>{result.name}</span>
+                            <a href={`/product/${result.id}`} className="search-result-link">
+                            <span>{result.name}</span>
                             </a>
                           </li>
                         ))
-                      : noResults && (
-                          <p className="no-results-message">
-                            No Prouduct with such Name
-                          </p>
-                        )}
+                    ) : (
+                      noResults && (
+                        <p className="no-results-message">
+                          No Prouduct with such Name
+                        </p>
+                      )
+                    )}
                   </ul>
                 )}
                 {/* <button
