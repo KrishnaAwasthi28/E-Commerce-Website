@@ -5,13 +5,31 @@ import Navbar from "./components/Navbar";
 import Cart from "./components/Cart";
 import AddProduct from "./components/AddProduct";
 import Product from "./components/Product";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AppProvider } from "./Context/Context";
 import UpdateProduct from "./components/UpdateProduct";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Login from "./components/Login";
+import Register from "./components/Register";
+import MyProfile from "./components/MyProfile";
 
+function Layout({ children, onSelectCategory }) {
+  const location = useLocation();
+
+  // Pages where you don't want navbar
+  const hideNavbarRoutes = ["/login","/register"];
+
+  return (
+    <>
+      {!hideNavbarRoutes.includes(location.pathname) && (
+        <Navbar onSelectCategory={onSelectCategory} />
+      )}
+      {children}
+    </>
+  );
+}
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -39,22 +57,27 @@ function App() {
   return (
     <AppProvider>
       <BrowserRouter>
-        <Navbar onSelectCategory={handleCategorySelect}
-         />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home addToCart={addToCart} selectedCategory={selectedCategory}
-              />
-            }
-          />
-          <Route path="/add_product" element={<AddProduct />} />
-          <Route path="/product" element={<Product  />} />
-          <Route path="product/:id" element={<Product  />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/product/update/:id" element={<UpdateProduct />} />
-        </Routes>
+        <Layout onSelectCategory={handleCategorySelect}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  addToCart={addToCart}
+                  selectedCategory={selectedCategory}
+                />
+              }
+            />
+            <Route path="/add_product" element={<AddProduct />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="product/:id" element={<Product />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/product/update/:id" element={<UpdateProduct />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/my-profile" element={<MyProfile />} />
+          </Routes>
+        </Layout>
       </BrowserRouter>
     </AppProvider>
   );

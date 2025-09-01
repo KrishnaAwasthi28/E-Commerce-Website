@@ -1,8 +1,15 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=TASA+Explorer:wght@400..800&display=swap');
+
 .dark-theme{
     --root_background: #1f1f1f;}
     .light-theme{
-        --root_background: white;
+        --root_background: rgb(255, 255, 255);
     }
 :root{
-    background-color: #1f1f1f;
+    /* background-color: #1f1f1f; */
+    font-family: "Nunito Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
 }

@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import AppContext from "../Context/Context";
-import unplugged from "../assets/unplugged.png"
+import unplugged from "../assets/unplugged.png";
+import { ToastContainer, toast } from "react-toastify";
 
 const Home = ({ selectedCategory }) => {
   const { data, isError, addToCart, refreshData } = useContext(AppContext);
@@ -52,7 +53,11 @@ const Home = ({ selectedCategory }) => {
   if (isError) {
     return (
       <h2 className="text-center" style={{ padding: "18rem" }}>
-      <img src={unplugged} alt="Error" style={{ width: '100px', height: '100px' }}/>
+        <img
+          src={unplugged}
+          alt="Error"
+          style={{ width: "100px", height: "100px" }}
+        />
       </h2>
     );
   }
@@ -97,12 +102,12 @@ const Home = ({ selectedCategory }) => {
                   height: "360px",
                   boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                   borderRadius: "10px",
-                  overflow: "hidden", 
+                  overflow: "hidden",
                   backgroundColor: productAvailable ? "#fff" : "#ccc",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent:'flex-start',
-                  alignItems:'stretch'
+                  justifyContent: "flex-start",
+                  alignItems: "stretch",
                 }}
                 key={id}
               >
@@ -115,11 +120,11 @@ const Home = ({ selectedCategory }) => {
                     alt={name}
                     style={{
                       width: "100%",
-                      height: "150px", 
-                      objectFit: "cover",  
+                      height: "150px",
+                      objectFit: "cover",
                       padding: "5px",
                       margin: "0",
-                      borderRadius: "10px 10px 10px 10px", 
+                      borderRadius: "10px 10px 10px 10px",
                     }}
                   />
                   <div
@@ -150,7 +155,11 @@ const Home = ({ selectedCategory }) => {
                     <div className="home-cart-price">
                       <h5
                         className="card-text"
-                        style={{ fontWeight: "600", fontSize: "1.1rem",marginBottom:'5px' }}
+                        style={{
+                          fontWeight: "600",
+                          fontSize: "1.1rem",
+                          marginBottom: "5px",
+                        }}
                       >
                         <i class="bi bi-currency-rupee"></i>
                         {price}
@@ -158,21 +167,61 @@ const Home = ({ selectedCategory }) => {
                     </div>
                     <button
                       className="btn-hover color-9"
-                      style={{margin:'10px 25px 0px '  }}
-                      onClick={(e) => {
+                      style={{ margin: "10px 25px 0px" }}
+                      onClick={async (e) => {
                         e.preventDefault();
-                        addToCart(product);
+
+                        const user = JSON.parse(localStorage.getItem("user"));
+                        console.log(user);
+                        const userId = user?.user_id;
+                        if (!user) {
+                          alert("Please login to add items to cart.");
+                          return;
+                        }
+                        try {
+                          await axios.post(
+                            `http://localhost:8080/api/cart/${userId}/add`,
+                            {}, // body not needed
+                            {
+                              params: {
+                                productId: product.id,
+                                quantity: 1,
+                              },
+                              auth: {
+                                username: user.mobileNumber,
+                                password: user.rawPassword,
+                              },
+                            }
+                          );
+
+                          toast.success("Added to Cart !");
+                          // optional: refresh cart context if you want navbar badge to update
+                          // refreshData();
+                        } catch (error) {
+                          console.log(user);
+                          console.error("Error adding to cart:", error);
+                          toast.error("Failed to add product to cart !")
+                        }
                       }}
                       disabled={!productAvailable}
                     >
                       {productAvailable ? "Add to Cart" : "Out of Stock"}
-                    </button> 
+                    </button>
                   </div>
                 </Link>
               </div>
             );
           })
         )}
+        <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
       </div>
     </>
   );
