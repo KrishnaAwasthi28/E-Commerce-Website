@@ -17,7 +17,7 @@ const CheckoutPopup = ({ show, handleClose, cartItems, totalPrice, handleCheckou
               <div>
                 <b><p>{item.name}</p></b>
                 <p>Quantity: {item.quantity}</p>
-                <p>Price: ${item.price * item.quantity}</p>
+                <p>Price: ${item.product.price * item.quantity}</p>
               </div>
             </div>
           ))}

@@ -66,6 +66,7 @@ const Product = () => {
       </h2>
     );
   }
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
     <>
       <div className="containers" style={{ display: "flex" }}>
@@ -129,7 +130,8 @@ const Product = () => {
             </h6>
           
           </div>
-          <div className="update-button" style={{ display: "flex", gap: "1rem" }}>
+          {user?.role === "admin" && (
+            <div className="update-button" style={{ display: "flex", gap: "1rem" }}>
             <button
               className="btn btn-primary"
               type="button"
@@ -164,6 +166,8 @@ const Product = () => {
               Delete
             </button>
           </div>
+          )}
+          
         </div>
       </div>
     </>
