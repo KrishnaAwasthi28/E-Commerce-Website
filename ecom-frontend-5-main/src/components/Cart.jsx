@@ -23,7 +23,7 @@ const Cart = () => {
       if (userId) {
         try {
           const res = await axios.get(
-            `http://localhost:8080/api/cart/${userId}`,
+            `https://e-commerce-website-1-xzpr.onrender.com/api/cart/${userId}`,
             {
               headers: { Authorization: `Basic ${auth}` },
             }
@@ -45,7 +45,7 @@ const Cart = () => {
       if (cartId) {
         try {
           const res = await axios.get(
-            `http://localhost:8080/api/cart/${cartId}/items`,
+            `https://e-commerce-website-1-xzpr.onrender.com/api/cart/${cartId}/items`,
             {
               headers: { Authorization: `Basic ${auth}` },
             }
@@ -53,7 +53,7 @@ const Cart = () => {
           const itemsWithProduct = await Promise.all(
             res.data.map(async (item) => {
               const prodRes = await axios.get(
-                `http://localhost:8080/api/product/${item.productId}`,
+                `https://e-commerce-website-1-xzpr.onrender.com/api/product/${item.productId}`,
                 { headers: { Authorization: `Basic ${auth}` } }
               );
               return { ...item, product: prodRes.data };
@@ -83,7 +83,7 @@ const Cart = () => {
     if (currentQty < stockQty) {
       try {
         await axios.put(
-          `http://localhost:8080/api/cart/item/${cartItemId}?quantity=${
+          `https://e-commerce-website-1-xzpr.onrender.com/api/cart/item/${cartItemId}?quantity=${
             currentQty + 1
           }`,
           {},
@@ -110,7 +110,7 @@ const Cart = () => {
     if (currentQty > 1) {
       try {
         await axios.put(
-          `http://localhost:8080/api/cart/item/${cartItemId}?quantity=${
+          `https://e-commerce-website-1-xzpr.onrender.com/api/cart/item/${cartItemId}?quantity=${
             currentQty - 1
           }`,
           {},
@@ -135,7 +135,7 @@ const Cart = () => {
   const handleRemoveFromCart = async (cartItemId) => {
     try {
       console.log(cartItemId);
-      await axios.delete(`http://localhost:8080/api/cart/item/${cartItemId}`, {
+      await axios.delete(`https://e-commerce-website-1-xzpr.onrender.com/api/cart/item/${cartItemId}`, {
         headers: { Authorization: `Basic ${auth}` },
       });
       setCartItems(cartItems.filter((item) => item.cartItemId !== cartItemId));
@@ -147,7 +147,7 @@ const Cart = () => {
   // ✅ Clear cart
   const handleClearCart = async () => {
     try {
-      await axios.delete(`http://localhost:8080/api/cart/${cartId}/clear`, {
+      await axios.delete(`https://e-commerce-website-1-xzpr.onrender.com/api/cart/${cartId}/clear`, {
         headers: { Authorization: `Basic ${auth}` },
       });
       setCartItems([]);
@@ -186,7 +186,7 @@ const Cart = () => {
                 >
                   <div>
                     <img
-                      src={`http://localhost:8080/api/product/${item.product.id}/image`}
+                      src={`https://e-commerce-website-1-xzpr.onrender.com/api/product/${item.product.id}/image`}
                       alt={item.product.name}
                       className="cart-item-image"
                     />

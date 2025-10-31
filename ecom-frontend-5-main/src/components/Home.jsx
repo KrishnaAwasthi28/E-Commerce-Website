@@ -24,7 +24,7 @@ const Home = ({ selectedCategory }) => {
           data.map(async (product) => {
             try {
               const response = await axios.get(
-                `http://localhost:8080/api/product/${product.id}/image`,
+                `https://e-commerce-website-1-xzpr.onrender.com/api/product/${product.id}/image`,
                 { responseType: "blob" }
               );
               const imageUrl = URL.createObjectURL(response.data);
@@ -180,7 +180,7 @@ const Home = ({ selectedCategory }) => {
                         }
                         try {
                           await axios.post(
-                            `http://localhost:8080/api/cart/${userId}/add`,
+                            `https://e-commerce-website-1-xzpr.onrender.com/api/cart/${userId}/add`,
                             {}, // body not needed
                             {
                               params: {

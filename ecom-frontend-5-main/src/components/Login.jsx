@@ -19,7 +19,7 @@ export default function Login() {
     try {
       console.log("Sending payload:", formData);
       const res = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        "https://e-commerce-website-1-xzpr.onrender.com/api/auth/login",
         formData,
         {
           headers: { "Content-Type": "application/json" },

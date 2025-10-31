@@ -25,7 +25,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
 
   const fetchData = async (value) => {
     try {
-      const response = await axios.get("http://localhost:8080/api/products");
+      const response = await axios.get("https://e-commerce-website-1-xzpr.onrender.com/api/products");
       setSearchResults(response.data);
       // console.log(response.data);
     } catch (error) {
@@ -39,7 +39,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
       setShowSearchResults(true);
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/products/search?keyword=${value}`
+          `https://e-commerce-website-1-xzpr.onrender.com/api/products/search?keyword=${value}`
         );
         setSearchResults(response.data);
         setNoResults(response.data.length === 0);
@@ -106,7 +106,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
 
         // Step 1: Get Cart by User ID
         const cartResponse = await axios.get(
-          `http://localhost:8080/api/cart/${userId}`,
+          `https://e-commerce-website-1-xzpr.onrender.com/api/cart/${userId}`,
           {
             headers: { Authorization: `Basic ${auth}` },
           }
@@ -116,7 +116,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
 
         // Step 2: Get Cart Items by Cart ID
         const itemsResponse = await axios.get(
-          `http://localhost:8080/api/cart/${cartId}/items`,
+          `https://e-commerce-website-1-xzpr.onrender.com/api/cart/${cartId}/items`,
           {
             headers: { Authorization: `Basic ${auth}` },
           }
@@ -202,10 +202,23 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                   <span className="arrow">▼</span>
                 </div>
                 <div className="dropdown-menu">
-                  <Link to={"/my-profile"}>My Profile</Link>
-                  <Link>Orders</Link>
-                  <Link to={"/login"}>Logout</Link>
-                </div>
+  <Link to="/my-profile">My Profile</Link>
+  <Link>Orders</Link>
+
+  {localStorage.getItem("user") ? (
+    <Link
+      to="/login"
+      onClick={() => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("auth");
+      }}
+    >
+      Logout
+    </Link>
+  ) : (
+    <Link to="/login">Login</Link>
+  )}
+</div>
               </div>
 
               <button className="theme-btn" onClick={() => toggleTheme()}>
