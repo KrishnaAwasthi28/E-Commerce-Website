@@ -121,7 +121,7 @@ const Home = ({ selectedCategory }) => {
                     style={{
                       width: "100%",
                       height: "150px",
-                      objectFit: "cover",
+                      objectFit: "contain",
                       padding: "5px",
                       margin: "0",
                       borderRadius: "10px 10px 10px 10px",
@@ -140,7 +140,7 @@ const Home = ({ selectedCategory }) => {
                     <div>
                       <h5
                         className="card-title"
-                        style={{ margin: "0 0 10px 0", fontSize: "1.2rem" }}
+                        style={{ margin: "0 0 5px 0", fontSize: "1rem" }}
                       >
                         {name.toUpperCase()}
                       </h5>
@@ -166,8 +166,8 @@ const Home = ({ selectedCategory }) => {
                       </h5>
                     </div>
                     <button
-                      className="btn-hover color-9"
-                      style={{ margin: "10px 25px 0px" }}
+                      className="btn-hover color-9 add-to-cart-btn"
+                      // style={{ margin: "auto 25px 0px" }}
                       onClick={async (e) => {
                         e.preventDefault();
 

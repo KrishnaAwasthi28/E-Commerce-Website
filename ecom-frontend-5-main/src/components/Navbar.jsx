@@ -3,7 +3,7 @@ import Home from "./Home";
 import { FaCartShopping } from "react-icons/fa6";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { FcBiohazard } from "react-icons/fc";
+import { FcPaid } from "react-icons/fc";
 // import { json } from "react-router-dom";
 // import { BiSunFill, BiMoon } from "react-icons/bi";
 
@@ -121,7 +121,6 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
             headers: { Authorization: `Basic ${auth}` },
           }
         );
-
         // Step 3: Set cart count
         setCartCount(itemsResponse.data.length);
       } catch (error) {
@@ -136,8 +135,8 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
       <header>
         <nav className="navbar navbar-expand-lg fixed-top">
           <div className="container-fluid">
-            <a className="navbar-brand" href="https://telusko.com/">
-              E-Kart
+            <a className="navbar-brand" href="">
+              <FcPaid className="logo"/> E-Kart
             </a>
             <button
               className="navbar-toggler"
