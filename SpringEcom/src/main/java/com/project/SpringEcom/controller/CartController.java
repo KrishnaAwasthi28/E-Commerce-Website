@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173",allowedHeaders = "*")
+@CrossOrigin(origins = "https://e-commerce-website-final.onrender.com",allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {

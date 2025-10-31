@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173/",allowCredentials = "true")
+@CrossOrigin(origins = "https://e-commerce-website-final.onrender.com",allowCredentials = "true")
 @RequestMapping("/api/auth/")
 public class UserController {
     @Autowired
