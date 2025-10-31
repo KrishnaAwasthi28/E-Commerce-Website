@@ -229,12 +229,12 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                 )}
               </button>
               <div className="d-flex align-items-center ">
-                <a href="/cart" className="nav-link text-dark cart-logo">
+                <Link to={"/cart"}><a className="nav-link text-dark cart-logo">
                   <div className="logo-container">
                     <FaCartShopping className="logo" />
                     <span className="badge">{cartCount}</span>
                   </div>
-                </a>
+                </a></Link>
                 {/* <form className="d-flex" role="search" onSubmit={handleSearch} id="searchForm"> */}
                 <input
                   className="form-control me-2"
