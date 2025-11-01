@@ -1,5 +1,5 @@
 package com.project.SpringEcom.controller;
-
+import javax.xml.bind.DatatypeConverter;
 import com.project.SpringEcom.model.Product;
 import com.project.SpringEcom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,21 +39,30 @@ public class ProductController {
     @GetMapping("product/{productId}/image")
     public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId){
         Product product = productService.getProductById(productId);
-
         if (product == null || product.getImageData() == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        byte[] actualBytes;
+
+        // detect if it's hex text instead of raw bytes
+        if (product.getImageData().length > 0 && product.getImageData()[0] == '0' && product.getImageData()[1] == 'x') {
+            String hex = new String(product.getImageData());
+            hex = hex.replace("0x", "").replaceAll("[^0-9A-Fa-f]", "");
+            actualBytes = DatatypeConverter.parseHexBinary(hex);
+        } else {
+            actualBytes = product.getImageData();
+        }
+
         HttpHeaders headers = new HttpHeaders();
-        // Use the stored type if available, else default to JPEG
         headers.setContentType(
                 product.getImageType() != null
                         ? MediaType.parseMediaType(product.getImageType())
                         : MediaType.IMAGE_JPEG
         );
-        headers.setContentLength(product.getImageData().length);
+        headers.setContentLength(actualBytes.length);
 
-        return new ResponseEntity<>(product.getImageData(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(actualBytes, headers, HttpStatus.OK);
     }
 
     @PostMapping("/product")
