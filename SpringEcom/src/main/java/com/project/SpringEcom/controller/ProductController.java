@@ -3,7 +3,9 @@ package com.project.SpringEcom.controller;
 import com.project.SpringEcom.model.Product;
 import com.project.SpringEcom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,12 +38,22 @@ public class ProductController {
 
     @GetMapping("product/{productId}/image")
     public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId){
-        Product product=productService.getProductById(productId);
-        if(product.getId()>0){
-            return new ResponseEntity<>(product.getImageData(),HttpStatus.OK);
-        }else{
+        Product product = productService.getProductById(productId);
+
+        if (product == null || product.getImageData() == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        HttpHeaders headers = new HttpHeaders();
+        // Use the stored type if available, else default to JPEG
+        headers.setContentType(
+                product.getImageType() != null
+                        ? MediaType.parseMediaType(product.getImageType())
+                        : MediaType.IMAGE_JPEG
+        );
+        headers.setContentLength(product.getImageData().length);
+
+        return new ResponseEntity<>(product.getImageData(), headers, HttpStatus.OK);
     }
 
     @PostMapping("/product")
