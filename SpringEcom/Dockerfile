@@ -5,10 +5,12 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-FROM openjdk:26-slim-bookworm
+# Use a stable Java runtime (Render-friendly)
+FROM eclipse-temurin:21-jre-jammy
+
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
-# Use the Render-assigned PORT dynamically
+
 ENTRYPOINT ["sh", "-c", "java -jar app.jar --server.port=$PORT"]
